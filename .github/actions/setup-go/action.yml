@@ -1,0 +1,31 @@
+name: Setup Go Environment
+
+description: Setup a Go environment; add it to the PATH; install and verify Go modules.
+
+inputs:
+  go-version-file:
+    description: Path to the go.mod or go.work file.
+    default: go.mod
+
+outputs:
+  go-version:
+    description: The installed Go version. Useful when given a version range as input.
+    value: ${{ steps.setup-go.go-version }}
+  cache-hit:
+    description: A boolean value to indicate if a cache was hit
+    value: ${{ steps.setup-go.cache-hit }}
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-go@v5
+      id: setup-go
+      with:
+        go-version-file: ${{ inputs.go-version-file }}
+
+    - run: go mod tidy -diff
+      shell: bash
+    - run: go mod download
+      shell: bash
+    - run: go mod verify
+      shell: bash
