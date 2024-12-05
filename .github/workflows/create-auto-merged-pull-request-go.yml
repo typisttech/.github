@@ -1,0 +1,92 @@
+name: Create Auto-merged Pull Request (Go)
+
+on:
+  workflow_call:
+    inputs:
+      command:
+        description: The command to create the actual changeset
+        required: true
+        type: string
+
+      # setup-go
+      go-version-file:
+        description: Path to the go.mod or go.work file.
+        default: go.mod
+        type: string
+
+      # create-auto-merged-pull-request
+      add-paths:
+        description: >
+          A comma or newline-separated list of file paths to commit.
+          Paths should follow git's pathspec syntax.
+          Defaults to adding all new and modified files.
+        type: string
+      branch:
+        description: The pull request branch name.
+        required: true
+        type: string
+      delete-branch:
+        description: >
+          Delete the `branch` if it doesn't have an active pull request associated with it.
+        default: true
+        type: boolean
+      base:
+        description: >
+          The pull request base branch.
+          Defaults to the branch checked out in the workflow.
+        default: ${{ github.ref_name }}
+        type: string
+      title:
+        description: The title of the pull request.
+        type: string
+      body:
+        description: The body of the pull request.
+        type: string
+      labels:
+        description: A comma or newline separated list of labels.
+        type: string
+
+    secrets:
+      # create-auto-merged-pull-request
+      pr-write-pat-token:
+        description: The PAT token that the action will use to reopen the pull request.
+        required: true
+      token:
+        description: The token that the action will use to create, update and close the pull request.
+        required: true
+
+permissions: {}
+
+jobs:
+  create-auto-merged-pull-request-go:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: typisttech/.github/.github/actions/setup-go@v1
+        with:
+          go-version-file: ${{ inputs.go-version-file }}
+
+      - run: ${{ inputs.command }}
+
+      - name: Compute temporary variables
+        id: tmp-vars
+        shell: bash
+        run: |
+          echo "title=:robot: \`$COMMAND\`" >> "$GITHUB_OUTPUT"
+        env:
+          COMMAND: ${{ inputs.command }}
+
+      - uses: typisttech/.github/.github/actions/create-auto-merged-pull-request@v1
+        with:
+          add-paths: ${{ inputs.add-paths }}
+          branch: ${{ inputs.branch }}
+          delete-branch: ${{ inputs.delete-branch }}
+          base: ${{ inputs.base }}
+          title: ${{ inputs.title || steps.tmp-vars.outputs.title }}
+          labels: ${{ inputs.labels }}
+          pr-write-pat-token: ${{ secrets.pr-write-pat-token }}
+          token: ${{ secrets.token }}
