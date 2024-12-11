@@ -10,10 +10,6 @@ inputs:
       Defaults to adding all new and modified files.
   branch:
     description: The pull request branch name.
-  delete-branch:
-    description: >
-      Delete the `branch` if it doesn't have an active pull request associated with it.
-    default: 'true'
   base:
     description: >
       The pull request base branch.
@@ -22,13 +18,13 @@ inputs:
     description: The title of the pull request.
   labels:
     description: A comma or newline separated list of labels.
-    default: bot
+    default: github_actions
 
   # secrets
-  pr-write-pat-token:
+  app-id:
     description: The PAT token that the action will use to reopen the pull request.
     required: true
-  token:
+  private-key:
     description: The token that the action will use to create, update and close the pull request.
     required: true
 
@@ -52,69 +48,36 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Compute temporary variables
-      id: tmp-vars
-      shell: bash
-      run: |
-        {
-          echo 'body<<EOF'
-          echo "Automated commit by the \`$WORKFLOW\` workflow for the \`$BASE\` branch at $(date -u +"%Y-%m-%dT%H:%M:%SZ")."
-          
-          echo "| Context | Value |"
-          echo "| -- | -- |"
-          echo "| Workflow Ref | \`$WORKFLOW_REF\` |"
-          echo "| Workflow SHA | \`$WORKFLOW_SHA\` |"
-          echo "| Action Repository | \`$ACTION_REPOSITORY\` |"
-          echo "| Action Ref | \`$ACTION_REF\` |"
-          echo "| Action Path | \`$ACTION_PATH\` |"
-          echo EOF
-        } >> "$GITHUB_OUTPUT"
-      env:
-        BASE: ${{ inputs.base }}
-        WORKFLOW: ${{ github.workflow }}
-        WORKFLOW_REF: ${{ github.workflow_ref }}
-        WORKFLOW_SHA: ${{ github.workflow_sha }}
-        ACTION_REPOSITORY: ${{ github.action_repository }}
-        ACTION_REF: ${{ github.action_ref }}
-        ACTION_PATH: ${{ github.action_path }}
+    - name: Create GitHub App Token
+      uses: actions/create-github-app-token@v1
+      id: app-token
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.private-key }}
 
     - name: Create Pull Request
       id: create-pull-request
       uses: peter-evans/create-pull-request@v7
       with:
+        token: ${{ steps.app-token.outputs.token }}
+        author: typisttechbot <190668613+typisttechbot@users.noreply.github.com>
         add-paths: ${{ inputs.add-paths }}
         commit-message: | # The blank line is important.
           ${{ inputs.title }}
 
-          ${{ steps.tmp-vars.outputs.body }}
+          Automated commit by the `${{ github.workflow }}` workflow.
         branch: ${{ inputs.branch }}
-        delete-branch: ${{ inputs.delete-branch }}
+        delete-branch: true
         base: ${{ inputs.base }}
         sign-commits: true
         title: ${{ inputs.title }}
-        body: ${{ steps.tmp-vars.outputs.body }}
+        body: "Automated commit by the `${{ github.workflow }}` workflow."
         labels: ${{ inputs.labels }}
-
-    - name: Close the PR
-      if: steps.create-pull-request.outputs.pull-request-operation == 'created' || steps.create-pull-request.outputs.pull-request-operation == 'updated'
-      run: gh pr close "$PR_URL"
-      shell: bash
-      env:
-        GH_TOKEN: ${{ inputs.token }}
-        PR_URL: ${{ steps.create-pull-request.outputs.pull-request-url }}
-
-    - name: Reopen the PR with PAT token
-      if: steps.create-pull-request.outputs.pull-request-operation == 'created' || steps.create-pull-request.outputs.pull-request-operation == 'updated'
-      run: gh pr reopen "$PR_URL"
-      shell: bash
-      env:
-        GH_TOKEN: ${{ inputs.pr-write-pat-token }}
-        PR_URL: ${{ steps.create-pull-request.outputs.pull-request-url }}
 
     - name: Enable auto-merge for the PR
       if: steps.create-pull-request.outputs.pull-request-operation == 'created' || steps.create-pull-request.outputs.pull-request-operation == 'updated'
       run: gh pr merge --auto --squash "$PR_URL"
       shell: bash
       env:
-        GH_TOKEN: ${{ inputs.token }}
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
         PR_URL: ${{ steps.create-pull-request.outputs.pull-request-url }}

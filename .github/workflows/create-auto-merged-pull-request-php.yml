@@ -1,4 +1,4 @@
-name: Create Auto-merged Pull Request (Go)
+name: Create Auto-merged Pull Request (PHP)
 
 on:
   workflow_call:
@@ -8,10 +8,28 @@ on:
         required: true
         type: string
 
-      # setup-go
-      go-version-file:
-        description: Path to the go.mod or go.work file.
-        default: go.mod
+      # shivammathur/setup-php
+      php-version:
+        description: Setup PHP version.
+        default: '8.4'
+        type: string
+
+      tools:
+        description: Setup popular tools globally.
+        type: string
+
+      # ramsey/composer-install
+      composer-install: # if
+        description: Whether to install Composer dependencies.
+        default: true
+        type: boolean
+      dependency-versions:
+        description: The version of dependencies to prefer (`lowest`, `highest`, or `locked`).
+        default: locked
+        type: string
+      composer-options:
+        description: Additional options to pass to Composer (e.g. `--ignore-platform-reqs`).
+        default: --optimize-autoloader
         type: string
 
       # create-auto-merged-pull-request
@@ -34,6 +52,9 @@ on:
       title:
         description: The title of the pull request.
         type: string
+      body:
+        description: The body of the pull request.
+        type: string
       labels:
         description: A comma or newline separated list of labels.
         default: |
@@ -44,17 +65,26 @@ on:
 permissions: {}
 
 jobs:
-  create-auto-merged-pull-request-go:
+  create-auto-merged-pull-request-php:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
-      - uses: typisttech/.github/.github/actions/setup-go@v2
+      - uses: shivammathur/setup-php@v2
         with:
-          go-version-file: ${{ inputs.go-version-file }}
+          php-version: ${{ inputs.php-version }}
+          coverage: none
+          tools: ${{ inputs.tools }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: ramsey/composer-install@v3
+        if: ${{ inputs.composer-install }}
+        with:
+          dependency-versions: ${{ inputs.dependency-versions }}
+          composer-options: ${{ inputs.composer-options }}
 
       - run: ${{ inputs.command }}
 
