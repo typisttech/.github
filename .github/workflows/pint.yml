@@ -1,0 +1,34 @@
+name: Pint
+
+on:
+  workflow_call:
+    inputs:
+      # shivammathur/setup-php
+      php-version:
+        description: Setup PHP version.
+        default: '8.3'
+        type: string
+
+      pint-version: # tools
+        description: Setup pint version.
+        default: '1'
+        type: string
+
+permissions: {}
+
+jobs:
+  auto-pint:
+    uses: typisttech/.github/.github/workflows/create-auto-merged-pull-request-php.yml@v2
+    permissions:
+      contents: read
+    with:
+      command: pint
+      php-version: ${{ inputs.php-version }}
+      tools: pint:${{ inputs.pint-version }}
+      composer-install: false
+      branch: tastendruck/github_actions/pint/${{ github.ref_name }}
+      labels: |
+        tastendruck
+        github_actions
+        pint
+    secrets: inherit
