@@ -1,0 +1,32 @@
+name: Composer Audit
+
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  composer-audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            composer.json
+          sparse-checkout-cone-mode: false
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: lowest
+          composer-options: --no-install --no-audit --no-autoloader --ignore-platform-reqs
+
+      - run: composer audit --locked
