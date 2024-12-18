@@ -6,7 +6,7 @@ on:
 permissions: {}
 
 jobs:
-  update-release-draft:
+  release-drafter:
     runs-on: ubuntu-latest
     permissions:
       contents: write
