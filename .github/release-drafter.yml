@@ -74,6 +74,7 @@ categories:
 
 exclude-labels:
   - invalid
+  - revert
   - reverted
   - skip_release
   - skip-release
