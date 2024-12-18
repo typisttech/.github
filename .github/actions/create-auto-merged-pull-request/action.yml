@@ -18,7 +18,6 @@ inputs:
     description: The title of the pull request.
   labels:
     description: A comma or newline separated list of labels.
-    default: github_actions
 
   # secrets
   app-id:
@@ -72,7 +71,10 @@ runs:
         sign-commits: true
         title: ${{ inputs.title }}
         body: "Automated commit by the `${{ github.workflow }}` workflow."
-        labels: ${{ inputs.labels }}
+        labels: |
+          github_actions
+          tastendruck
+          ${{ inputs.labels }}
 
     - name: Enable auto-merge for the PR
       if: steps.create-pull-request.outputs.pull-request-operation == 'created' || steps.create-pull-request.outputs.pull-request-operation == 'updated'

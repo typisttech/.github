@@ -57,9 +57,6 @@ on:
         type: string
       labels:
         description: A comma or newline separated list of labels.
-        default: |
-          tastendruck
-          github_actions
         type: string
 
 permissions: {}
@@ -96,7 +93,7 @@ jobs:
         env:
           COMMAND: ${{ inputs.command }}
 
-      - uses: typisttech/.github/.github/actions/create-auto-merged-pull-request@v2
+      - uses: typisttech/.github/.github/actions/create-auto-merged-pull-request@default-labels
         with:
           app-id: ${{ vars.TASTENDRUCK_APP_ID }}
           private-key: ${{ secrets.TASTENDRUCK_PRIVATE_KEY }}
