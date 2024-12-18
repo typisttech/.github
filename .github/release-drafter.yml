@@ -69,11 +69,13 @@ categories:
     collapse-after: 3
     labels:
       - github_actions
+      - github-actions
       - tastendruck
 
 exclude-labels:
   - invalid
   - reverted
+  - skip_release
   - skip-release
 
 version-resolver:
