@@ -93,7 +93,7 @@ jobs:
         env:
           COMMAND: ${{ inputs.command }}
 
-      - uses: typisttech/.github/.github/actions/create-auto-merged-pull-request@default-labels
+      - uses: typisttech/.github/.github/actions/create-auto-merged-pull-request@v2
         with:
           app-id: ${{ vars.TASTENDRUCK_APP_ID }}
           private-key: ${{ secrets.TASTENDRUCK_PRIVATE_KEY }}
