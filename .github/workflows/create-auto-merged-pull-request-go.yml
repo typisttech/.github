@@ -36,9 +36,6 @@ on:
         type: string
       labels:
         description: A comma or newline separated list of labels.
-        default: |
-          tastendruck
-          github_actions
         type: string
 
 permissions: {}
