@@ -68,8 +68,6 @@ categories:
   - title: ':robot: Automated'
     collapse-after: 3
     labels:
-      - github_actions
-      - github-actions
       - tastendruck
 
 exclude-labels:

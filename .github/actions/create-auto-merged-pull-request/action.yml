@@ -59,7 +59,6 @@ runs:
       uses: peter-evans/create-pull-request@v7
       with:
         token: ${{ steps.app-token.outputs.token }}
-        author: typisttechbot <190668613+typisttechbot@users.noreply.github.com>
         add-paths: ${{ inputs.add-paths }}
         commit-message: | # The blank line is important.
           ${{ inputs.title }}
@@ -72,7 +71,6 @@ runs:
         title: ${{ inputs.title }}
         body: "Automated commit by the `${{ github.workflow }}` workflow."
         labels: |
-          github_actions
           tastendruck
           ${{ inputs.labels }}
 

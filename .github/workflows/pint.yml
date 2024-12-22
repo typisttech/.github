@@ -26,6 +26,6 @@ jobs:
       php-version: ${{ inputs.php-version }}
       tools: pint:${{ inputs.pint-version }}
       composer-install: false
-      branch: tastendruck/github_actions/pint/${{ github.ref_name }}
+      branch: tastendruck/pint/${{ github.ref_name }}
       labels: pint
     secrets: inherit
