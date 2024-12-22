@@ -72,7 +72,6 @@ runs:
         title: ${{ inputs.title }}
         body: "Automated commit by the `${{ github.workflow }}` workflow."
         labels: |
-          github_actions
           tastendruck
           ${{ inputs.labels }}
 
