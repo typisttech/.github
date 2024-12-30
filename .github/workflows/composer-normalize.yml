@@ -1,0 +1,31 @@
+name: Composer Normalize
+
+on:
+  workflow_call:
+    inputs:
+      # shivammathur/setup-php
+      php-version:
+        description: Setup PHP version.
+        default: '8.4'
+        type: string
+
+      composer-normalize-version: # tools
+        description: Setup composer-normalize version.
+        default: '2'
+        type: string
+
+permissions: {}
+
+jobs:
+  composer-normalize:
+    uses: typisttech/.github/.github/workflows/create-auto-merged-pull-request-php.yml@v2
+    permissions:
+      contents: read
+    with:
+      command: composer-normalize
+      php-version: ${{ inputs.php-version }}
+      tools: composer-normalize:${{ inputs.composer-normalize-version }}
+      composer-install: false
+      branch: tastendruck/composer-normalize/${{ github.ref_name }}
+      labels: composer-normalize
+    secrets: inherit
