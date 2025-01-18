@@ -1,0 +1,33 @@
+name: PHP Matrix
+
+on:
+  workflow_call:
+    outputs:
+      matrix: 
+        value: ${{ jobs.php-matrix.outputs.matrix }}
+      constraint: 
+        value: ${{ fromJSON(jobs.php-matrix.outputs.matrix).constraint }}
+      versions: 
+        value: ${{ toJSON(fromJSON(jobs.php-matrix.outputs.matrix).versions) }}
+      lowest: 
+        value: ${{ fromJSON(jobs.php-matrix.outputs.matrix).lowest }}
+      highest: 
+        value: ${{ fromJSON(jobs.php-matrix.outputs.matrix).highest }}
+
+permissions: {}
+
+jobs:
+  php-matrix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      matrix: ${{ steps.php-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: composer.json
+          sparse-checkout-cone-mode: false
+
+      - uses: typisttech/php-matrix-action@v1
+        id: php-matrix
