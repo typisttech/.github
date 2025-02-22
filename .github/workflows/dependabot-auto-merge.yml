@@ -17,6 +17,10 @@ on:
         description: Whether to merge patch updates.
         default: false
         type: boolean
+      strategy:
+        description: The strategy to use for updating the pull request. Must be one of 'merge', 'squash', or 'rebase'.
+        default: merge
+        type: string
 
 permissions: {}
 
@@ -28,26 +32,22 @@ jobs:
       pull-requests: write
     if: github.event.pull_request.user.login == 'dependabot[bot]' && (inputs.major || inputs.minor || inputs.patch)
     steps:
+      - if: ${{ !contains(fromJSON('["merge", "squash", "rebase"]'), inputs.strategy) }}
+        run: |
+          echo "Invalid strategy. Must be one of 'merge', 'squash', or 'rebase'."
+          exit 1
+
       - name: Dependabot metadata
         id: dependabot-metadata
         uses: dependabot/fetch-metadata@v2
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
-      - if: inputs.major && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major'
-        run: gh pr merge --auto --merge "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - if: inputs.minor && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor'
-        run: gh pr merge --auto --merge "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - if: inputs.patch && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch'
-        run: gh pr merge --auto --merge "$PR_URL"
+      - if: |
+          (inputs.major && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major') 
+          || (inputs.minor && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor')
+          || (inputs.patch && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch')
+        run: gh pr merge --auto --${{ inputs.strategy }} "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
