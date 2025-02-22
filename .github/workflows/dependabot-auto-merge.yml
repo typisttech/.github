@@ -19,7 +19,7 @@ on:
         type: boolean
       strategy:
         description: The strategy to use for updating the pull request. Must be one of 'merge', 'squash', or 'rebase'.
-        default: merge
+        default: squash
         type: string
 
 permissions: {}
