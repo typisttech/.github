@@ -32,4 +32,4 @@ jobs:
           dependency-versions: ${{ matrix.dependency-versions }}
           composer-options: --no-install --no-audit --no-autoloader --ignore-platform-reqs
 
-      - run: composer audit --locked
+      - run: composer audit
