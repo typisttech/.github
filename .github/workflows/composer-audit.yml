@@ -30,6 +30,6 @@ jobs:
       - uses: ramsey/composer-install@v3
         with:
           dependency-versions: ${{ matrix.dependency-versions }}
-          composer-options: --no-install --no-audit --no-autoloader --ignore-platform-reqs
+          composer-options: --no-audit --no-autoloader --ignore-platform-reqs
 
       - run: composer audit
