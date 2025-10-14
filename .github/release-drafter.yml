@@ -50,17 +50,20 @@ categories:
       - readme
 
   - title: ':white_check_mark: Tests'
+    collapse-after: 3
     labels:
       - test
       - tests
 
   - title: ':wrench: Maintenance'
+    collapse-after: 3
     labels:
       - chore
       - config
       - maintenance
 
   - title: ':pencil2: Typos'
+    collapse-after: 3
     labels:
       - typo
       - typos
