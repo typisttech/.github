@@ -1,0 +1,51 @@
+name: Pint
+
+description: Format PHP code with pint and create auto-merged PR
+
+inputs:
+  # shivammathur/setup-php
+  php-version:
+    description: Setup PHP version.
+    default: '8.4'
+    type: string
+
+  pint-version: # tools
+    description: Setup pint version.
+    default: '1'
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: echo "$GITHUB_CONTEXT"
+
+    - uses: actions/checkout@v5
+
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ inputs.php-version }}
+        coverage: none
+        tools: ${{ inputs.tools }}
+
+    - run: pint
+
+    - uses: actions/checkout@v5
+      with:
+        repo: ${{ github.action_repository }}
+        ref: ${{ github.action_ref }}
+        path: ${{ github.action_path }}/extra/create-auto-merged-pull-request
+        
+    - run: ls -R ${{ github.action_path }}/extra
+
+    - uses: ${{ github.action_path }}/extra/create-auto-merged-pull-request
+      with:
+        app-id: ${{ vars.TASTENDRUCK_APP_ID }}
+        private-key: ${{ secrets.TASTENDRUCK_PRIVATE_KEY }}
+        add-paths: ${{ inputs.add-paths }}
+        branch: tastendruck/pint/${{ github.ref_name }}
+        base: ${{ inputs.base }}
+        title: "robot: `pint`"
+        labels: pint
