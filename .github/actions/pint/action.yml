@@ -36,14 +36,17 @@ runs:
 
     - uses: actions/checkout@v5
       with:
+        sparse-checkout: |
+          .github/actions/actions/create-auto-merged-pull-request
+        sparse-checkout-cone-mode: false
         repo: ${{ github.action_repository }}
         ref: ${{ github.action_ref }}
-        path: ${{ github.action_path }}/extra/create-auto-merged-pull-request
-        
-    - run: ls -R ${{ github.action_path }}/extra
+        path: ../.typisttech/.github/actions
+
+    - run: ls -R ../.typisttech/.github/actions
       shell: bash
 
-    - uses: ./extra/create-auto-merged-pull-request
+    - uses: ../.typisttech/.github/actions/create-auto-merged-pull-request
       working-directory: ${{ github.action_path }}
       with:
         app-id: ${{ vars.TASTENDRUCK_APP_ID }}
