@@ -45,7 +45,12 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: typisttech/.github/.github/actions/pint@version-thress
+      - name: Dump GitHub context in format-php
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - uses: typisttech/.github/.github/actions/pint@version-three
         with:
           php-version: ${{ inputs.pint-php-version }}
           pint-version: ${{ inputs.pint-version }}

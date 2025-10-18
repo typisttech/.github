@@ -17,7 +17,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Dump GitHub context
+    - name: Dump GitHub context in pint action
       env:
         GITHUB_CONTEXT: ${{ toJSON(github) }}
       run: echo "$GITHUB_CONTEXT"
