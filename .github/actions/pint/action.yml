@@ -21,6 +21,7 @@ runs:
       env:
         GITHUB_CONTEXT: ${{ toJSON(github) }}
       run: echo "$GITHUB_CONTEXT"
+      shell: bash
 
     - uses: actions/checkout@v5
 
@@ -31,6 +32,7 @@ runs:
         tools: ${{ inputs.tools }}
 
     - run: pint
+      shell: bash
 
     - uses: actions/checkout@v5
       with:
@@ -39,6 +41,7 @@ runs:
         path: ${{ github.action_path }}/extra/create-auto-merged-pull-request
         
     - run: ls -R ${{ github.action_path }}/extra
+      shell: bash
 
     - uses: ${{ github.action_path }}/extra/create-auto-merged-pull-request
       with:
