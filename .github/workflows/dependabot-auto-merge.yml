@@ -1,4 +1,4 @@
-# Taken from https://docs.github.com/en/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions
+# Taken from https://docs.github.com/en/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions#enabling-automerge-on-a-pull-request
 # and https://github.com/dependabot/fetch-metadata/blob/06ea45a2e4582d87b11f03c7ce596ae3261f39f6/README.md?plain=1#L133-L160
 name: Dependabot Auto-merge
 
@@ -22,14 +22,13 @@ on:
         default: squash
         type: string
 
-permissions: {}
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   auto-merge-pull-request:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     if: github.event.pull_request.user.login == 'dependabot[bot]' && (inputs.major || inputs.minor || inputs.patch)
     steps:
       - if: ${{ !contains(fromJSON('["merge", "squash", "rebase"]'), inputs.strategy) }}

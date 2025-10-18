@@ -1,0 +1,91 @@
+name: Format PHP
+
+on:
+  workflow_call:
+    inputs:
+      # pint
+      pint:
+        description: Whether to run pint
+        default: true
+        type: boolean
+      pint-php-version:
+        description: Setup PHP version for pint.
+        default: '8.4'
+        type: string
+      pint-version:
+        description: Setup pint version.
+        default: '1'
+        type: string
+      pint-extra-paths:
+        description: Non .php to pint.
+        default: ''
+        type: string
+
+      # composer-normalize
+      composer-normalize:
+        description: Whether to run composer-normalize
+        default: true
+        type: boolean
+      composer-normalize-php-version:
+        description: Setup PHP version for composer-normalize.
+        default: '8.4'
+        type: string
+      composer-normalize-version:
+        description: Setup composer-normalize version.
+        default: '2'
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  pint:
+    if: ${{ inputs.pint }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ inputs.pint-php-version }}
+        coverage: none
+        tools: "pint:${{ inputs.pint-version }}"
+
+    - uses: actions/checkout@v5
+
+    - run: pint
+      shell: bash
+
+    - run: pint ${{ inputs.pint-extra-paths }}
+      if: ${{ inputs.pint-extra-paths != '' }}
+      shell: bash
+
+    - uses: typisttech/.github/.github/actions/create-auto-merged-pull-request@v3
+      with:
+        branch: tastendruck/pint/${{ github.ref_name }}
+        title: "robot: `pint`"
+        labels: pint
+        app-id: ${{ vars.TASTENDRUCK_APP_ID }}
+        private-key: ${{ secrets.TASTENDRUCK_PRIVATE_KEY }}
+
+  composer-normalize:
+    if: ${{ inputs.composer-normalize }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ inputs.composer-normalize-php-version }}
+        coverage: none
+        tools: "composer-normalize:${{ inputs.composer-normalize-version }}"
+
+    - uses: actions/checkout@v5
+
+    - run: composer-normalize
+      shell: bash
+
+    - uses: typisttech/.github/.github/actions/create-auto-merged-pull-request@v3
+      with:
+        branch: tastendruck/composer-normalize/${{ github.ref_name }}
+        title: "robot: `composer normalize`"
+        labels: composer-normalize
+        app-id: ${{ vars.TASTENDRUCK_APP_ID }}
+        private-key: ${{ secrets.TASTENDRUCK_PRIVATE_KEY }}

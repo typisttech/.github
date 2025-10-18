@@ -10,10 +10,6 @@ inputs:
       Defaults to adding all new and modified files.
   branch:
     description: The pull request branch name.
-  base:
-    description: >
-      The pull request base branch.
-      Defaults to the branch checked out in the workflow.
   title:
     description: The title of the pull request.
   labels:
@@ -21,28 +17,11 @@ inputs:
 
   # secrets
   app-id:
-    description: The PAT token that the action will use to reopen the pull request.
+    description: GitHub App ID that will use to create, update and close the pull request.
     required: true
   private-key:
-    description: The token that the action will use to create, update and close the pull request.
+    description: GitHub App private key that will use to create, update and close the pull request.
     required: true
-
-outputs:
-  pull-request-number:
-    description: The pull request number
-    value: ${{ steps.create-pull-request.pull-request-number }}
-  pull-request-url:
-    description: The URL of the pull request.
-    value: ${{ steps.create-pull-request.pull-request-url }}
-  pull-request-operation:
-    description: The pull request operation performed by the action, `created`, `updated` or `closed`.
-    value: ${{ steps.create-pull-request.pull-request-operation }}
-  pull-request-head-sha:
-    description: The commit SHA of the pull request branch.
-    value: ${{ steps.create-pull-request.pull-request-head-sha }}
-  pull-request-branch:
-    description: The pull request branch name
-    value: ${{ steps.create-pull-request.pull-request-branch }}
 
 runs:
   using: composite
@@ -59,14 +38,12 @@ runs:
       uses: peter-evans/create-pull-request@v7
       with:
         token: ${{ steps.app-token.outputs.token }}
-        add-paths: ${{ inputs.add-paths }}
         commit-message: | # The blank line is important.
           ${{ inputs.title }}
 
           Automated commit by the `${{ github.workflow }}` workflow.
         branch: ${{ inputs.branch }}
         delete-branch: true
-        base: ${{ inputs.base }}
         sign-commits: true
         title: ${{ inputs.title }}
         body: "Automated commit by the `${{ github.workflow }}` workflow."

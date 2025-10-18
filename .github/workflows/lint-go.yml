@@ -1,0 +1,26 @@
+name: Lint Go
+
+on:
+  workflow_call:
+    inputs:
+      go-version-file:
+        description: Path to the go.mod or go.work file.
+        default: go.mod
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  go-mod-tidy-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-go@v5
+        id: setup-go
+        with:
+          go-version-file: ${{ inputs.go-version-file }}
+
+      - run: go mod tidy -diff
+        shell: bash
