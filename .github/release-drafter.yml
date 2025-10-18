@@ -37,11 +37,6 @@ categories:
       - bug
       - bugs
 
-  - title: '️:arrow_up: Dependencies'
-    collapse-after: 3
-    labels:
-      - dependencies # Default label used by Dependabot
-
   - title: ':memo: Documentation'
     labels:
       - doc
@@ -72,6 +67,11 @@ categories:
     collapse-after: 3
     labels:
       - tastendruck
+
+  - title: '️:arrow_up: Dependencies'
+    collapse-after: 3
+    labels:
+      - dependencies # Default label used by Dependabot
 
 exclude-labels:
   - invalid
