@@ -43,7 +43,8 @@ runs:
     - run: ls -R ${{ github.action_path }}/extra
       shell: bash
 
-    - uses: ${{ github.action_path }}/extra/create-auto-merged-pull-request
+    - uses: ./extra/create-auto-merged-pull-request
+      working-directory: ${{ github.action_path }}
       with:
         app-id: ${{ vars.TASTENDRUCK_APP_ID }}
         private-key: ${{ secrets.TASTENDRUCK_PRIVATE_KEY }}
