@@ -60,9 +60,9 @@ jobs:
   #     contents: read
   #   with:
   #     command: composer-normalize
-  #     php-version: ${{ inputs.php-version }}
-  #     tools: composer-normalize:${{ inputs.composer-normalize-version }}
+  #     php-version: inputs.php-version }}
+  #     tools: composer-normalize:inputs.composer-normalize-version }}
   #     composer-install: false
-  #     branch: tastendruck/composer-normalize/${{ github.ref_name }}
+  #     branch: tastendruck/composer-normalize/github.ref_name }}
   #     labels: composer-normalize
   #   secrets: inherit
