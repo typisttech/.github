@@ -62,7 +62,7 @@ jobs:
     - uses: typisttech/.github/.github/actions/create-auto-merged-pull-request@v3
       with:
         branch: tastendruck/pint/${{ github.ref_name }}
-        title: "robot: `pint`"
+        title: ":robot: `pint`"
         labels: pint
         app-id: ${{ vars.TASTENDRUCK_APP_ID }}
         private-key: ${{ secrets.TASTENDRUCK_PRIVATE_KEY }}
@@ -85,7 +85,7 @@ jobs:
     - uses: typisttech/.github/.github/actions/create-auto-merged-pull-request@v3
       with:
         branch: tastendruck/composer-normalize/${{ github.ref_name }}
-        title: "robot: `composer normalize`"
+        title: ":robot: `composer normalize`"
         labels: composer-normalize
         app-id: ${{ vars.TASTENDRUCK_APP_ID }}
         private-key: ${{ secrets.TASTENDRUCK_PRIVATE_KEY }}
