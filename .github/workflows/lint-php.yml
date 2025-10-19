@@ -1,0 +1,91 @@
+name: Lint PHP
+
+on:
+  workflow_call:
+    inputs:
+      # phpstan
+      phpstan:
+        description: Whether to run phpstan
+        default: true
+        type: boolean
+      phpstan-command:
+        description: Command to run phpstan
+        default: 'vendor/bin/phpstan analyse --error-format=github'
+        type: string
+
+      # box
+      box:
+        description: Whether to validate box config
+        default: false
+        type: boolean
+      box-php-version:
+        description: Setup PHP version for box.
+        default: '8.4'
+        type: string
+      box-version:
+        description: Setup box version.
+        default: '4'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  php-matrix:
+    if: ${{ inputs.phpstan }}
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.php-matrix.outputs.versions }}
+      highest: ${{ steps.php-matrix.outputs.highest }}
+      lowest: ${{ steps.php-matrix.outputs.lowest }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          sparse-checkout: composer.json
+          sparse-checkout-cone-mode: false
+
+      - uses: typisttech/php-matrix-action@v2
+        id: php-matrix
+
+  phpstan:
+    if: ${{ inputs.phpstan }}
+    needs: php-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ${{ fromJSON(needs.php-matrix.outputs.versions) }}
+        dependency-versions:
+          - highest
+        include:
+          - php-version: ${{ needs.php-matrix.outputs.highest }}
+            dependency-versions: locked
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      - uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: ${{ matrix.dependency-versions }}
+
+      - run: ${{ inputs.phpstan-command }}
+
+  box:
+    if: ${{ inputs.box }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.box-php-version }}
+          coverage: none
+          tools: "box:${{ inputs.box-version }}"
+
+      - run: box validate
