@@ -1,0 +1,22 @@
+name: Go Proxy
+
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  go-proxy:
+    if: github.repository == 'typisttech/comver'
+    runs-on: ubuntu-latest
+    env:
+      GOPROXY: https://proxy.golang.org
+      GOSUMDB: sum.golang.org
+    steps:
+      - uses: actions/setup-go@v6
+        with:
+          cache: false
+
+      - run: go list -m -u -json -x github.com/${{ github.repository }}@${{ github.sha }}
+      - run: go list -m -u -json -x github.com/${{ github.repository }}@${{ github.ref_name }}
+        continue-on-error: true
