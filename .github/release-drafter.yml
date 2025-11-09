@@ -32,10 +32,18 @@ categories:
       - deprecate
       - deprecated
 
+  - title: ':lock: Security'
+    labels:
+      - security
+
   - title: ':bug: Bug Fixes'
     labels:
       - bug
       - bugs
+
+  - title: ':jigsaw: Miscellaneous'
+    labels:
+      - miscellaneous
 
   - title: ':memo: Documentation'
     labels:
@@ -77,6 +85,7 @@ exclude-labels:
   - invalid
   - revert
   - reverted
+  - 'skip release'
   - skip_release
   - skip-release
 
