@@ -10,7 +10,7 @@ on:
         type: boolean
       pint-php-version:
         description: Setup PHP version for pint.
-        default: '8.4'
+        default: '8.5'
         type: string
       pint-version:
         description: Setup pint version.
@@ -28,7 +28,7 @@ on:
         type: boolean
       composer-normalize-php-version:
         description: Setup PHP version for composer-normalize.
-        default: '8.4'
+        default: '8.5'
         type: string
       composer-normalize-version:
         description: Setup composer-normalize version.

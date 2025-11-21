@@ -20,7 +20,7 @@ on:
         type: boolean
       box-php-version:
         description: Setup PHP version for box.
-        default: '8.4'
+        default: '8.5'
         type: string
       box-version:
         description: Setup box version.
