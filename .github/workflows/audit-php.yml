@@ -14,7 +14,7 @@ jobs:
       highest: ${{ steps.php-matrix.outputs.highest }}
       lowest: ${{ steps.php-matrix.outputs.lowest }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           sparse-checkout: composer.json
           sparse-checkout-cone-mode: false
@@ -38,7 +38,7 @@ jobs:
     env:
       COMPOSER_NO_AUDIT: 1
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           sparse-checkout: |
             composer.json

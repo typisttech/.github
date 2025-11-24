@@ -50,7 +50,7 @@ jobs:
         coverage: none
         tools: "pint:${{ inputs.pint-version }}"
 
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - run: pint
       shell: bash
@@ -77,7 +77,7 @@ jobs:
         coverage: none
         tools: "composer-normalize:${{ inputs.composer-normalize-version }}"
 
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - run: composer-normalize
       shell: bash
