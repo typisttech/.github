@@ -47,3 +47,8 @@ jobs:
       - uses: golangci/golangci-lint-action@v9
         with:
           version: ${{ inputs.golangci-lint-version }}
+          
+      - run: echo ${FAIL_ME}
+        shell: bash
+        env:
+          FAIL_ME: ${{ inputs.fail_me }}
