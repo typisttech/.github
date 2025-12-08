@@ -1,0 +1,28 @@
+# Taken from https://github.com/rhysd/actionlint/blob/dc8cca81866af081bdd0e0653474916d7046c5c5/docs/usage.md#use-actionlint-on-github-actions
+# See also: https://github.com/rhysd/actionlint/issues/117#issuecomment-1132835368
+name: Lint GitHub Actions
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          sparse-checkout: .github
+
+      - name: Check workflow files
+        uses: docker://rhysd/actionlint:latest
+        with:
+          args: -color
