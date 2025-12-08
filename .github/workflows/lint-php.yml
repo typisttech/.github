@@ -42,7 +42,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           sparse-checkout: composer.json
-          sparse-checkout-cone-mode: false
 
       - uses: typisttech/php-matrix-action@v2
         id: php-matrix
