@@ -7,7 +7,6 @@ permissions: {}
 
 jobs:
   go-proxy:
-    if: github.repository == 'typisttech/comver'
     runs-on: ubuntu-latest
     env:
       GOPROXY: https://proxy.golang.org
