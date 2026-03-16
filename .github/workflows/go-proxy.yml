@@ -12,7 +12,7 @@ jobs:
       GOPROXY: https://proxy.golang.org
       GOSUMDB: sum.golang.org
     steps:
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
         with:
           cache: false
 
