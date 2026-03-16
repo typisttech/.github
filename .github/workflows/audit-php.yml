@@ -16,6 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           sparse-checkout: composer.json
 
       - uses: typisttech/php-matrix-action@v2
@@ -39,6 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          persist-credentials: false
           sparse-checkout: |
             composer.json
             composer.lock
