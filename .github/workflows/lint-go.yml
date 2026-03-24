@@ -8,6 +8,10 @@ on:
         default: go.mod
         type: string
 
+      go-experiment:
+        default: ""
+        type: string
+
       # golangci-lint
       golangci-lint:
         description: Whether to run golangci-lint
@@ -51,3 +55,5 @@ jobs:
       - uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9.2.0
         with:
           version: ${{ inputs.golangci-lint-version }}
+        env:
+          GOEXPERIMENT: ${{ inputs.go-experiment }}
