@@ -46,7 +46,7 @@ jobs:
           (inputs.major && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major') 
           || (inputs.minor && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor')
           || (inputs.patch && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch')
-        run: gh pr merge --auto --${{ inputs.strategy }} "$PR_URL"
+        run: gh pr merge --auto "--${{ inputs.strategy }}" "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
