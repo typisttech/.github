@@ -61,14 +61,14 @@ jobs:
       if: ${{ inputs.pint-extra-paths != '' }}
       shell: bash
 
-    - uses: typisttech/create-auto-merged-pull-request-action@42c8119c5e4397506847dc4d27168e98ce69dfc7 # v0.1.0
+    - uses: typisttech/create-auto-merged-pull-request-action@05e85fff478e9ff9dfbb4b6d95622b6a8ebafe78 # v0.2.0
       with:
         branch: tastendruck/pint/${{ github.ref_name }}
         title: ":robot: `pint`"
         labels: |
           pint
           tastendruck
-        app-id: ${{ vars.TASTENDRUCK_APP_ID }}
+        client-id: ${{ vars.TASTENDRUCK_CLIENT_ID }}
         private-key: ${{ secrets.TASTENDRUCK_PRIVATE_KEY }}
 
   composer-normalize:
@@ -88,12 +88,12 @@ jobs:
     - run: composer-normalize
       shell: bash
 
-    - uses: typisttech/create-auto-merged-pull-request-action@42c8119c5e4397506847dc4d27168e98ce69dfc7 # v0.1.0
+    - uses: typisttech/create-auto-merged-pull-request-action@05e85fff478e9ff9dfbb4b6d95622b6a8ebafe78 # v0.2.0
       with:
         branch: tastendruck/composer-normalize/${{ github.ref_name }}
         title: ":robot: `composer normalize`"
         labels: |
           composer-normalize
           tastendruck
-        app-id: ${{ vars.TASTENDRUCK_APP_ID }}
+        client-id: ${{ vars.TASTENDRUCK_CLIENT_ID }}
         private-key: ${{ secrets.TASTENDRUCK_PRIVATE_KEY }}
