@@ -9,23 +9,13 @@ template: |
   **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
 
 categories:
-  - title: ':sparkles: New Features & Enhancements'
-    labels:
-      - enhancement
-      - enhancements
-      - feature
-      - features
-      - improvement
-      - improvements
-
   - title: ':boom: Breaking'
     labels:
       - breaking
 
-  - title: ':fire: Removed'
+  - title: ':sparkles: New Features & Enhancements'
     labels:
-      - remove
-      - removed
+      - enhancement
   
   - title: ':wastebasket: Deprecated'
     labels:
@@ -39,37 +29,30 @@ categories:
   - title: ':bug: Bug Fixes'
     labels:
       - bug
-      - bugs
 
   - title: ':jigsaw: Miscellaneous'
     labels:
       - miscellaneous
 
   - title: ':memo: Documentation'
+    collapse-after: 3
     labels:
-      - doc
-      - docs
       - documentation
-      - readme
 
   - title: ':white_check_mark: Tests'
     collapse-after: 3
     labels:
       - test
-      - tests
 
   - title: ':wrench: Maintenance'
     collapse-after: 3
     labels:
-      - chore
-      - config
       - maintenance
 
   - title: ':pencil2: Typos'
     collapse-after: 3
     labels:
       - typo
-      - typos
 
   - title: ':robot: Automated'
     collapse-after: 3
@@ -84,18 +67,13 @@ categories:
 exclude-labels:
   - invalid
   - revert
-  - reverted
   - 'skip release'
-  - skip_release
-  - skip-release
 
 version-resolver:
   major:
     labels:
       - breaking
-      - major
   minor:
     labels:
       - enhancement
-      - minor
   default: patch
