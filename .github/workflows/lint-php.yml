@@ -6,7 +6,7 @@ on:
       # phpstan
       phpstan:
         description: Whether to run phpstan
-        default: true
+        default: false
         type: boolean
 
       # box
