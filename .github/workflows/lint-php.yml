@@ -8,10 +8,6 @@ on:
         description: Whether to run phpstan
         default: true
         type: boolean
-      phpstan-command:
-        description: Command to run phpstan
-        default: 'vendor/bin/phpstan analyse --error-format=github'
-        type: string
 
       # box
       box:
@@ -74,7 +70,7 @@ jobs:
         with:
           dependency-versions: ${{ matrix.dependency-versions }}
 
-      - run: ${{ inputs.phpstan-command }}
+      - run: vendor/bin/phpstan analyse --error-format=github
 
   box:
     if: ${{ inputs.box }}

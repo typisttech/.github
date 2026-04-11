@@ -16,6 +16,6 @@ jobs:
         with:
           cache: false
 
-      - run: go list -m -u -json -x github.com/${{ github.repository }}@${{ github.sha }}
-      - run: go list -m -u -json -x github.com/${{ github.repository }}@${{ github.ref_name }}
+      - run: go list -m -u -json -x "github.com/$GITHUB_REPOSITORY@$GITHUB_SHA"
+      - run: go list -m -u -json -x "github.com/$GITHUB_REPOSITORY@$GITHUB_REF_NAME"
         continue-on-error: true

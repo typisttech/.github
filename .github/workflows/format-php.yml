@@ -57,9 +57,11 @@ jobs:
     - run: pint
       shell: bash
 
-    - run: pint ${{ inputs.pint-extra-paths }}
+    - run: pint "$PINT_EXTRA_PATHS"
       if: ${{ inputs.pint-extra-paths != '' }}
       shell: bash
+      env:
+        PINT_EXTRA_PATHS: ${{ inputs.pint-extra-paths }}
 
     - uses: typisttech/create-auto-merged-pull-request-action@05e85fff478e9ff9dfbb4b6d95622b6a8ebafe78 # v0.2.0
       with:
