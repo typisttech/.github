@@ -59,10 +59,11 @@ categories:
     labels:
       - tastendruck
 
-  - title: '️:arrow_upper_right: Dependencies'
+  - title: ':arrow_up: Dependencies'
     collapse-after: 3
     labels:
-      - dependencies # Default label used by Dependabot
+      # Default label used by Dependabot
+      - dependencies
 
 exclude-labels:
   - invalid
