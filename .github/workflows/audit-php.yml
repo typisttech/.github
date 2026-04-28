@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       versions: ${{ steps.php-matrix.outputs.versions }}
-      highest: ${{ steps.php-matrix.outputs.highest }}
+      lowest: ${{ steps.php-matrix.outputs.lowest }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -30,7 +30,7 @@ jobs:
         dependency-versions:
           - highest
         include:
-          - php-version: ${{ needs.php-matrix.outputs.highest }}
+          - php-version: ${{ needs.php-matrix.outputs.lowest }}
             dependency-versions: locked
     env:
       COMPOSER_NO_AUDIT: 1
