@@ -63,7 +63,7 @@ jobs:
       env:
         PINT_EXTRA_PATHS: ${{ inputs.pint-extra-paths }}
 
-    - uses: typisttech/create-auto-merged-pull-request-action@05e85fff478e9ff9dfbb4b6d95622b6a8ebafe78 # v0.2.0
+    - uses: typisttech/create-auto-merged-pull-request-action@d21095afcd351570a2cb2b794301c65f26decfa6 # v0.2.2
       with:
         branch: tastendruck/pint/${{ github.ref_name }}
         title: ":robot: `pint`"
@@ -90,7 +90,7 @@ jobs:
     - run: composer-normalize
       shell: bash
 
-    - uses: typisttech/create-auto-merged-pull-request-action@05e85fff478e9ff9dfbb4b6d95622b6a8ebafe78 # v0.2.0
+    - uses: typisttech/create-auto-merged-pull-request-action@d21095afcd351570a2cb2b794301c65f26decfa6 # v0.2.2
       with:
         branch: tastendruck/composer-normalize/${{ github.ref_name }}
         title: ":robot: `composer normalize`"
