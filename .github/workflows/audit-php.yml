@@ -18,7 +18,7 @@ jobs:
           persist-credentials: false
           sparse-checkout: composer.json
 
-      - uses: typisttech/php-matrix-action@1cff0f08767f31f1784d1399250463b29fd49d20 # v2.1.0
+      - uses: typisttech/php-matrix-action@92d290886ed0aa1a486ba3c813f53382cebe7bd1 # v3.0.0
         id: php-matrix
 
   composer-audit:
