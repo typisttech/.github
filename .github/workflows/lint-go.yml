@@ -19,8 +19,14 @@ on:
         type: boolean
 
       golangci-lint-version:
-        description: Whether to run golangci-lint
-        default: latest
+        description: The version of golangci-lint to use.
+        type: string
+
+      golangci-lint-version-file:
+        description: |
+          Gets the version of golangci-lint to use from a file.
+          The path must be relative to the root of the project, or the `working-directory` if defined.
+          This parameter supports `.golangci-lint-version`, and `.tool-versions` files.
         type: string
 
 permissions:
@@ -55,5 +61,7 @@ jobs:
       - uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9.2.0
         with:
           version: ${{ inputs.golangci-lint-version }}
+          version-file: ${{ inputs.golangci-lint-version-file }}
+          install-mode: binary
         env:
           GOEXPERIMENT: ${{ inputs.go-experiment }}
