@@ -1,10 +1,11 @@
 name: Release Drafter
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
+  workflow_dispatch:
+  workflow_call:
 
 concurrency:
   group: dot-github-${{ github.workflow }}-${{ github.ref_name }}
