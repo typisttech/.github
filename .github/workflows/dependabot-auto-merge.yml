@@ -3,6 +3,9 @@
 name: Dependabot Auto-merge
 
 on:
+  pull_request:
+    branches:
+      - main
   workflow_call:
     inputs:
       major:
