@@ -5,12 +5,7 @@ updates:
     directory: /
     schedule:
       interval: daily
-    allow:
-      - dependency-name: "typisttech/*"
-
-  - package-ecosystem: github-actions
-    directory: /
-    schedule:
-      interval: daily
     cooldown:
       default-days: 3
+      exclude:
+        - dependency-name: "typisttech/*"
