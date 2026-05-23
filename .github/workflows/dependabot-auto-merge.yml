@@ -40,7 +40,7 @@ jobs:
         id: dependabot-metadata
         uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          github-token: "${{ github.token }}"
 
       - if: |
           (inputs.major && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major') 
@@ -49,5 +49,5 @@ jobs:
         run: gh pr merge --auto "--$STRATEGY" "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GH_TOKEN: ${{ github.token }}
           STRATEGY: ${{ inputs.strategy }}
