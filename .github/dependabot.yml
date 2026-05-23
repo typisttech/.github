@@ -8,4 +8,4 @@ updates:
     cooldown:
       default-days: 3
       exclude:
-        - dependency-name: "typisttech/*"
+        - "typisttech/*"
