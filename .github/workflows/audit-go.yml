@@ -3,8 +3,13 @@ name: Audit Go
 on:
   workflow_call:
     inputs:
+      go-version-file:
+        description: Path to the go.mod or go.work file.
+        default: go.mod
+        type: string
+
       go-experiment:
-        default: ""
+        default: ''
         type: string
 
 permissions:
@@ -17,3 +22,6 @@ jobs:
       GOEXPERIMENT: ${{ inputs.go-experiment }}
     steps:
       - uses: golang/govulncheck-action@31f7c5463448f83528bd771c2d978d940080c9fd # master
+        with:
+          go-version-file: ${{ inputs.go-version-file }}
+          go-version-input: '' # Unset to allow `go-version-file` to take effect
