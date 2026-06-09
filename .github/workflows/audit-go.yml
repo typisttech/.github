@@ -22,6 +22,3 @@ jobs:
       GOEXPERIMENT: ${{ inputs.go-experiment }}
     steps:
       - uses: golang/govulncheck-action@31f7c5463448f83528bd771c2d978d940080c9fd # master
-        with:
-          go-version-file: ${{ inputs.go-version-file }}
-          go-version-input: '' # Unset to allow `go-version-file` to take effect
