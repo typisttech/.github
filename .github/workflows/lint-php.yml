@@ -3,6 +3,12 @@ name: Lint PHP
 on:
   workflow_call:
     inputs:
+      # composer-normalize
+      composer-normalize:
+        description: Whether to run composer-normalize
+        default: true
+        type: boolean
+
       # phpstan
       phpstan:
         description: Whether to run phpstan
@@ -27,6 +33,25 @@ permissions:
   contents: read
 
 jobs:
+  composer-normalize:
+    if: ${{ inputs.composer-normalize }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+      with:
+        php-version: '8.5'
+        coverage: none
+        tools: "composer-normalize:2"
+
+    - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      with:
+        persist-credentials: false
+        sparse-checkout: composer.json
+        sparse-checkout-cone-mode: false
+
+    - run: composer-normalize --dry-run
+      shell: bash
+
   php-matrix:
     if: ${{ inputs.phpstan }}
     runs-on: ubuntu-latest
