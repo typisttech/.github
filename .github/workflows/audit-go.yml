@@ -12,13 +12,22 @@ on:
         default: ''
         type: string
 
-permissions:
-  contents: read
-
 jobs:
   govulncheck:
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
     runs-on: ubuntu-latest
     env:
       GOEXPERIMENT: ${{ inputs.go-experiment }}
     steps:
       - uses: golang/govulncheck-action@3fa7bd9cee2cfdf3499a8803b226e43de7b7cdb4 # master
+        with:
+          output-format: sarif
+          output-file: govulncheck.sarif
+
+      - uses: github/codeql-action/upload-sarif@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
+        with:
+          sarif_file: govulncheck.sarif
+          category: govulncheck
