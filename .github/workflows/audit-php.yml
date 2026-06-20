@@ -17,6 +17,7 @@ jobs:
         with:
           persist-credentials: false
           sparse-checkout: composer.json
+          sparse-checkout-cone-mode: false
 
       - uses: typisttech/php-matrix-action@65bbdaffdb0be005bda1ee30b7815b8dbf8b00d1 # v3.0.1
         id: php-matrix
@@ -35,6 +36,7 @@ jobs:
           sparse-checkout: |
             composer.json
             composer.lock
+          sparse-checkout-cone-mode: false
 
       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
