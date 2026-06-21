@@ -15,6 +15,12 @@ on:
         default: false
         type: boolean
 
+      # mago
+      mago:
+        description: Whether to run mago
+        default: false
+        type: boolean
+
       # box
       box:
         description: Whether to validate box config
@@ -80,7 +86,6 @@ jobs:
         include:
           - php-version: ${{ needs.php-matrix.outputs.lowest }}
             dependency-versions: locked
-
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -96,6 +101,32 @@ jobs:
           dependency-versions: ${{ matrix.dependency-versions }}
 
       - run: vendor/bin/phpstan analyse --error-format=github
+
+  mago:
+    if: ${{ inputs.mago }}
+    needs: php-matrix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: ${{ needs.php-matrix.outputs.lowest }}
+          coverage: none
+
+      - run: composer install --prefer-dist
+
+      - uses: nhedger/setup-mago@473d3a2bfe0b32a62c8b910059d7f03a16519f2e # v2.0.0
+
+      - run: mago format --check
+
+      - run: mago lint
+        if: success() || failure()
+
+      - run: mago analyze
+        if: success() || failure()
 
   box:
     if: ${{ inputs.box }}
