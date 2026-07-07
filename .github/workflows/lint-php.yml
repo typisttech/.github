@@ -27,11 +27,11 @@ on:
         default: false
         type: boolean
       box-php-version:
-        description: Setup PHP version for box.
+        description: The PHP version for box to use
         default: '8.5'
         type: string
       box-version:
-        description: Setup box version.
+        description: The box version to use
         default: '4'
         type: string
 

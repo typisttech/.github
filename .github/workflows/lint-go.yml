@@ -19,7 +19,7 @@ on:
         type: boolean
 
       golangci-lint-version:
-        description: The version of golangci-lint to use.
+        description: The golangci-lint version to use.
         type: string
 
       golangci-lint-version-file:
