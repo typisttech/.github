@@ -10,71 +10,78 @@ template: |
 
 categories:
   - title: ':boom: Breaking'
-    labels:
-      - breaking
+    semver-increment: major
+    when:
+      labels:
+        - breaking
 
   - title: ':sparkles: New Features & Enhancements'
-    labels:
-      - enhancement
+    semver-increment: minor
+    when:
+      labels:
+        - enhancement
   
   - title: ':wastebasket: Deprecated'
-    labels:
-      - deprecate
-      - deprecated
+    when:
+      labels:
+        - deprecate
+        - deprecated
 
   - title: ':lock: Security'
-    labels:
-      - security
+    when:
+      labels:
+        - security
 
   - title: ':bug: Bug Fixes'
-    labels:
-      - bug
+    when:
+      labels:
+        - bug
 
   - title: ':jigsaw: Miscellaneous'
-    labels:
-      - miscellaneous
+    when:
+      labels:
+        - miscellaneous
 
   - title: ':memo: Documentation'
     collapse-after: 3
-    labels:
-      - documentation
+    when:
+      labels:
+        - documentation
 
   - title: ':white_check_mark: Tests'
     collapse-after: 3
-    labels:
-      - test
+    when:
+      labels:
+        - test
 
   - title: ':wrench: Maintenance'
     collapse-after: 3
-    labels:
-      - maintenance
+    when:
+      labels:
+        - maintenance
 
   - title: ':pencil2: Typos'
     collapse-after: 3
-    labels:
-      - typo
+    when:
+      labels:
+        - typo
 
   - title: ':robot: Automated'
     collapse-after: 3
-    labels:
-      - tastendruck
+    when:
+      labels:
+        - tastendruck
 
   - title: ':arrow_up: Dependencies'
     collapse-after: 3
-    labels:
-      # Default label used by Dependabot
-      - dependencies
+    when:
+      labels:
+        # Default label used by Dependabot
+        - dependencies 
 
-exclude-labels:
-  - invalid
-  - revert
-  - 'skip release'
-
-version-resolver:
-  major:
-    labels:
-      - breaking
-  minor:
-    labels:
-      - enhancement
-  default: patch
+  - type: 'pre-exclude'
+    when:
+      labels: 
+        - invalid
+        - revert
+        - 'skip release'
