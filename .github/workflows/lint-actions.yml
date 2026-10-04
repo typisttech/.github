@@ -54,7 +54,7 @@ jobs:
           sparse-checkout-cone-mode: false
 
       - name: Check workflow files
-        uses: docker://rhysd/actionlint:latest # zizmor: ignore[unpinned-images]
+        uses: docker://rhysd/actionlint:latest # zizmor: ignore[unpinned-images] Dependabot does not support `docker://` syntax
         with:
           args: -color
 
