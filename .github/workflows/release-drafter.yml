@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs: &inputs
       tag:
-        description: Release tag
+        description: Release tag.
         required: false
         type: string
   workflow_call:

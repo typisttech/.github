@@ -5,37 +5,37 @@ on:
     inputs:
       # composer-normalize
       composer-normalize:
-        description: Whether to run composer-normalize
+        description: Whether to run composer-normalize.
         default: true
         type: boolean
 
       # phpstan
       phpstan:
-        description: Whether to run phpstan
+        description: Whether to run phpstan.
         default: false
         type: boolean
 
       # mago
       mago:
-        description: Whether to run mago
+        description: Whether to run mago.
         default: false
         type: boolean
       mago-version:
-        description: The mago version to use
+        description: The mago version to use.
         default: '1'
         type: string
 
       # box
       box:
-        description: Whether to validate box config
+        description: Whether to validate box config.
         default: false
         type: boolean
       box-php-version:
-        description: The PHP version for box to use
+        description: The PHP version for box to use.
         default: '8.5'
         type: string
       box-version:
-        description: The box version to use
+        description: The box version to use.
         default: '4'
         type: string
 
