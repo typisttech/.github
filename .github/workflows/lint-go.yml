@@ -14,7 +14,7 @@ on:
 
       # golangci-lint
       golangci-lint:
-        description: Whether to run golangci-lint
+        description: Whether to run golangci-lint.
         default: false
         type: boolean
 

@@ -6,9 +6,9 @@ on:
       # zizmor
       zizmor-persona:
         description: &zizmor-persona-description |
-          The auditing persona to use
+          The auditing persona to use.
 
-          This can be 'regular', 'pedantic' (default), or 'auditor'
+          This can be 'regular', 'pedantic' (default), or 'auditor'.
         default: &zizmor-persona-default pedantic
         type: string
 
@@ -69,7 +69,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Inject zizmor config from `typisttech/.github`
+      - name: Inject zizmor config from `typisttech/.github` repo
         run: |
           mkdir -p .github &&
           curl --fail \
