@@ -12,14 +12,15 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   # Taken from https://github.com/rhysd/actionlint/blob/dc8cca81866af081bdd0e0653474916d7046c5c5/docs/usage.md#use-actionlint-on-github-actions
   # See also: https://github.com/rhysd/actionlint/issues/117#issuecomment-1132835368
   actionlint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
