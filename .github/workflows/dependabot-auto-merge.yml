@@ -28,7 +28,7 @@ permissions:
 
 jobs:
   auto-merge-pull-request:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: github.event.pull_request.user.login == 'dependabot[bot]' && (inputs.major || inputs.minor || inputs.patch)
     steps:
       - if: ${{ !contains(fromJSON('["merge", "squash", "rebase"]'), inputs.strategy) }}
@@ -43,7 +43,7 @@ jobs:
           github-token: "${{ github.token }}"
 
       - if: |
-          (inputs.major && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major') 
+          (inputs.major && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major')
           || (inputs.minor && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor')
           || (inputs.patch && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch')
         run: gh pr merge --auto "--$STRATEGY" "$PR_URL"

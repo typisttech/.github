@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   release-drafter:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       contents: write
       pull-requests: read
