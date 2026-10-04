@@ -3,11 +3,12 @@ name: Audit PHP
 on:
   workflow_call:
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   php-matrix:
+    permissions:
+      contents: read
     runs-on: ubuntu-slim
     outputs:
       versions: ${{ steps.php-matrix.outputs.versions }}

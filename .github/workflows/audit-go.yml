@@ -12,6 +12,8 @@ on:
         default: ''
         type: string
 
+permissions: {}
+
 jobs:
   govulncheck:
     permissions:
