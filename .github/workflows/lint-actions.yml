@@ -12,15 +12,19 @@ on:
     branches:
       - main
 
+concurrency:
+  group: tt-dot-github-${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
 permissions: {}
 
 jobs:
   # Taken from https://github.com/rhysd/actionlint/blob/dc8cca81866af081bdd0e0653474916d7046c5c5/docs/usage.md#use-actionlint-on-github-actions
   # See also: https://github.com/rhysd/actionlint/issues/117#issuecomment-1132835368
   actionlint:
-    runs-on: ubuntu-latest
     permissions:
       contents: read
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -34,11 +38,11 @@ jobs:
           args: -color
 
   zizmor:
-    runs-on: ubuntu-latest
     permissions:
-      security-events: write
+      security-events: write # for uploading results to GitHub advanced security
       contents: read # only needed for private or internal repos
       actions: read # only needed for private or internal repos
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

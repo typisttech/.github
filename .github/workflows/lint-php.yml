@@ -39,8 +39,7 @@ on:
         default: '4'
         type: string
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   composer-normalize:
@@ -63,6 +62,8 @@ jobs:
       shell: bash
 
   php-matrix:
+    permissions:
+      contents: read
     if: ${{ inputs.phpstan }}
     runs-on: ubuntu-slim
     outputs:
@@ -79,6 +80,8 @@ jobs:
         id: php-matrix
 
   phpstan:
+    permissions:
+      contents: read
     if: ${{ inputs.phpstan }}
     needs: php-matrix
     runs-on: ubuntu-slim
@@ -107,6 +110,8 @@ jobs:
       - run: vendor/bin/phpstan analyse --error-format=github
 
   mago:
+    permissions:
+      contents: read
     if: ${{ inputs.mago }}
     needs: php-matrix
     runs-on: ubuntu-slim
@@ -132,6 +137,8 @@ jobs:
         if: success() || failure()
 
   box:
+    permissions:
+      contents: read
     if: ${{ inputs.box }}
     runs-on: ubuntu-slim
     steps:
