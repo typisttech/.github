@@ -2,7 +2,28 @@ name: Lint GitHub Actions
 
 on:
   workflow_call:
+    inputs:
+      # zizmor
+      zizmor-persona:
+        description: &zizmor-persona-description |
+          The auditing persona to use
+
+          This can be 'regular', 'pedantic' (default), or 'auditor'
+        default: &zizmor-persona-default pedantic
+        type: string
+
   workflow_dispatch:
+    inputs:
+      zizmor-persona:
+        description: *zizmor-persona-description
+        required: true
+        default: *zizmor-persona-default
+        type: choice
+        options:
+          - regular
+          - pedantic
+          - auditor
+
   schedule:
     - cron: '11 2 * * *'
   pull_request:
@@ -59,3 +80,5 @@ jobs:
             https://raw.githubusercontent.com/typisttech/.github/refs/heads/main/.github/zizmor.yml
 
       - uses: zizmorcore/zizmor-action@cc914d7f3750a2d13d75c7f184a1060aa0e9d482 # v0.6.4
+        with:
+          persona: ${{ inputs.zizmor-persona || 'pedantic' }}
