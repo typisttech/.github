@@ -48,6 +48,22 @@ jobs:
       - run: go mod tidy -diff
         shell: bash
 
+  go-fix-diff:
+    permissions:
+      contents: read
+    runs-on: ubuntu-slim
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: ${{ inputs.go-version-file }}
+
+      - run: go fix -diff
+        shell: bash
+
   golangci-lint:
     permissions:
       contents: read
