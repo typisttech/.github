@@ -46,7 +46,6 @@ jobs:
           go-version-file: ${{ inputs.go-version-file }}
 
       - run: go mod tidy -diff
-        shell: bash
 
   go-fix-diff:
     permissions:
@@ -62,7 +61,6 @@ jobs:
           go-version-file: ${{ inputs.go-version-file }}
 
       - run: go fix -diff
-        shell: bash
 
   golangci-lint:
     permissions:
