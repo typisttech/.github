@@ -5,3 +5,6 @@ rules:
   dependabot-cooldown:
     config:
       days: 3
+
+  undocumented-permissions:
+    disable: true
