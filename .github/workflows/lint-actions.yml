@@ -60,9 +60,9 @@ jobs:
 
   zizmor:
     permissions:
-      security-events: write # for uploading results to GitHub advanced security
-      contents: read # only needed for private or internal repos
-      actions: read # only needed for private or internal repos
+      security-events: write
+      contents: read
+      actions: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

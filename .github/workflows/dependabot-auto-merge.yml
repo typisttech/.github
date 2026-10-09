@@ -27,8 +27,8 @@ permissions: {}
 jobs:
   auto-merge-pull-request:
     permissions:
-      contents: write # zizmor: ignore[excessive-permissions]
-      pull-requests: write # for `gh pr merge`
+      contents: write
+      pull-requests: write
     runs-on: ubuntu-slim
     if: github.event.pull_request.user.login == 'dependabot[bot]' && (inputs.major || inputs.minor || inputs.patch)
     steps:
