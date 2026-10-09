@@ -3,11 +3,15 @@ name: Publish Major Tag
 on:
   workflow_call:
     inputs:
-      tag:
+      tag: &tag
         description: |
           Tag name that the major tag will point to. Examples: 'v1.2.3', '1.2.3'.
         required: true
         type: string
+
+  workflow_dispatch:
+    inputs:
+      tag: *tag
 
 permissions: {}
 
