@@ -60,7 +60,6 @@ jobs:
             sparse-checkout-cone-mode: false
 
       - run: composer-normalize --dry-run
-        shell: bash
 
   php-matrix:
     permissions:
