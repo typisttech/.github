@@ -46,19 +46,20 @@ jobs:
     if: ${{ inputs.composer-normalize }}
     runs-on: ubuntu-slim
     steps:
-    - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-      with:
-        php-version: '8.5'
-        coverage: none
-        tools: "composer-normalize:2"
+      - parallel:
+        - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+          with:
+            php-version: '8.5'
+            coverage: none
+            tools: "composer-normalize:2"
 
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        persist-credentials: false
-        sparse-checkout: composer.json
-        sparse-checkout-cone-mode: false
+        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+          with:
+            persist-credentials: false
+            sparse-checkout: composer.json
+            sparse-checkout-cone-mode: false
 
-    - run: composer-normalize --dry-run
+      - run: composer-normalize --dry-run
 
   php-matrix:
     permissions:
@@ -93,14 +94,15 @@ jobs:
           - php-version: ${{ needs.php-matrix.outputs.lowest }}
             dependency-versions: locked
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
+      - parallel:
+        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+          with:
+            persist-credentials: false
 
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: ${{ matrix.php-version }}
-          coverage: none
+        - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+          with:
+            php-version: ${{ matrix.php-version }}
+            coverage: none
 
       - uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
         with:
@@ -115,25 +117,23 @@ jobs:
     needs: php-matrix
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
+      - parallel:
+        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+          with:
+            persist-credentials: false
 
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: ${{ needs.php-matrix.outputs.lowest }}
-          coverage: none
-          tools: "mago:${{ inputs.mago-version }}"
+        - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+          with:
+            php-version: ${{ needs.php-matrix.outputs.lowest }}
+            coverage: none
+            tools: "mago:${{ inputs.mago-version }}"
 
       - run: composer install --prefer-dist
 
-      - run: mago format --check
-
-      - run: mago lint
-        if: success() || failure()
-
-      - run: mago analyze
-        if: success() || failure()
+      - parallel:
+        - run: mago format --check
+        - run: mago lint
+        - run: mago analyze
 
   box:
     permissions:
@@ -141,15 +141,16 @@ jobs:
     if: ${{ inputs.box }}
     runs-on: ubuntu-slim
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 0
+      - parallel:
+        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+          with:
+            persist-credentials: false
+            fetch-depth: 0
 
-      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
-        with:
-          php-version: ${{ inputs.box-php-version }}
-          coverage: none
-          tools: "box:${{ inputs.box-version }}"
+        - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+          with:
+            php-version: ${{ inputs.box-php-version }}
+            coverage: none
+            tools: "box:${{ inputs.box-version }}"
 
       - run: box validate
