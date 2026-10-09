@@ -61,6 +61,8 @@ jobs:
           go-version-file: ${{ inputs.go-version-file }}
 
       - run: go fix -diff ./...
+        env:
+          GOEXPERIMENT: ${{ inputs.go-experiment }}
 
   golangci-lint:
     permissions:
