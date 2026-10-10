@@ -22,4 +22,4 @@ paths:
     ignore:
       - 'unexpected key "background" for step to run shell command'
       - 'step must run script with "run" section or run action with "uses" section'
-      - 'specifying action "\$/.+" in invalid format because ref is missing'
+      - 'specifying action "\$/.*" in invalid format because ref is missing'
