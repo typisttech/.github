@@ -24,8 +24,6 @@ on:
           - pedantic
           - auditor
 
-  schedule:
-    - cron: '11 2 * * *'
   pull_request:
     branches:
       - main
