@@ -1,0 +1,75 @@
+name: Composer Install
+
+author: Typist Tech Limited
+
+description: Install Composer Dependencies
+
+inputs:
+  prefer:
+    description: >
+      The version of dependencies to prefer. Must be one of 'locked' (default), 'lowest', or 'highest'.
+    required: true
+    default: 'locked'
+  composer-options:
+    description: >
+      Additional options to pass to Composer. For example: '--no-scripts --optimize-autoloader'.
+    required: false
+  working-directory:
+    description: >
+      The directory where composer.json is located, if it is not in the repository root.
+    required: true
+    default: ${{ github.workspace }}
+
+runs:
+  using: composite
+  steps:
+    - name: Assert prefer input
+      if: ${{ !contains(fromJSON('["locked", "lowest", "highest"]'), inputs.prefer) }}
+      run: |
+        echo "Invalid prefer. Must be one of 'locked', 'lowest', or 'highest'."
+        exit 1
+      shell: bash
+
+    - name: Assert composer.json exists
+      run: test -f composer.json
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Assert composer.lock exists
+      if: ${{ inputs.prefer == 'locked' }}
+      run: test -f composer.lock
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Get Composer cache directory
+      id: composer-cache
+      run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Cache dependencies (locked)
+      if: ${{ inputs.prefer == 'locked' }}
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: composer-${{ runner.os }}-${{ inputs.prefer }}-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          composer-${{ runner.os }}-${{ inputs.prefer }}-
+
+    - name: Cache dependencies (non-locked)
+      if: ${{ inputs.prefer != 'locked' }}
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: composer-${{ runner.os }}-${{ inputs.prefer }}-${{ hashFiles('**/composer.json') }}-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: |
+          composer-${{ runner.os }}-${{ inputs.prefer }}-${{ hashFiles('**/composer.json') }}-${{ github.run_id }}-
+          composer-${{ runner.os }}-${{ inputs.prefer }}-${{ hashFiles('**/composer.json') }}-
+          composer-${{ runner.os }}-${{ inputs.prefer }}-
+
+    - name: Install Composer dependencies
+      run: composer ${VERB} ${OPTIONS} --no-blocking --no-interaction --no-progress --ansi
+      env:
+        VERB: ${{ inputs.prefer == 'locked' && 'install' || 'update --no-audit' }}
+        OPTIONS: "${{ inputs.prefer == 'lowest' && '--prefer-lowest' || '' }} ${{ inputs.composer-options }}"
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
