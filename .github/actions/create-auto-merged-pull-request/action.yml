@@ -1,0 +1,63 @@
+name: Create Auto-merged Pull Request
+
+author: Typist Tech Limited
+
+description: Create Auto-merged Pull Request
+
+inputs:
+  add-paths:
+    description: >
+      A comma or newline-separated list of file paths to commit.
+      Paths should follow git's pathspec syntax.
+      Defaults to adding all new and modified files.
+  branch:
+    description: The pull request branch name.
+  title:
+    description: The title of the pull request.
+  labels:
+    description: A comma or newline separated list of labels.
+
+  # secrets
+  client-id:
+    description: GitHub App Client ID that will use to create, update and close the pull request.
+    required: true
+  private-key:
+    description: GitHub App private key that will use to create, update and close the pull request.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Create GitHub App Token
+      uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+      id: app-token
+      with:
+        client-id: ${{ inputs.client-id }}
+        private-key: ${{ inputs.private-key }}
+        permission-contents: write
+        permission-pull-requests: write
+
+    - name: Create Pull Request
+      id: create-pull-request
+      # zizmor: ignore[superfluous-actions]
+      uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+      with:
+        token: ${{ steps.app-token.outputs.token }}
+        commit-message: | # The blank line is important.
+          ${{ inputs.title }}
+
+          Automated commit by the `${{ github.workflow }}` workflow.
+        branch: ${{ inputs.branch }}
+        delete-branch: true
+        sign-commits: true
+        title: ${{ inputs.title }}
+        body: "Automated commit by the `${{ github.workflow }}` workflow."
+        labels: ${{ inputs.labels }}
+
+    - name: Enable auto-merge for the PR
+      if: steps.create-pull-request.outputs.pull-request-operation == 'created' || steps.create-pull-request.outputs.pull-request-operation == 'updated'
+      run: gh pr merge --auto --squash "$PR_URL"
+      shell: bash
+      env:
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        PR_URL: ${{ steps.create-pull-request.outputs.pull-request-url }}
