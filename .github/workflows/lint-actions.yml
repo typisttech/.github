@@ -72,6 +72,12 @@ jobs:
       actions: read
     runs-on: ubuntu-26.04
     steps:
+      - name: Assert zizmor-persona input
+        if: ${{ !contains(fromJSON('["regular", "pedantic", "auditor", ""]'), inputs.zizmor-persona) }}
+        run: |
+          echo "::error title=Invalid zizmor-persona::Must be one of 'regular', 'pedantic', or 'auditor'"
+          exit 1
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
