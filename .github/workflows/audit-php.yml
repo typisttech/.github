@@ -6,29 +6,11 @@ on:
 permissions: {}
 
 jobs:
-  php-matrix:
-    permissions:
-      contents: read
-    runs-on: ubuntu-slim
-    outputs:
-      versions: ${{ steps.php-matrix.outputs.versions }}
-      lowest: ${{ steps.php-matrix.outputs.lowest }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          sparse-checkout: composer.json
-          sparse-checkout-cone-mode: false
-
-      - uses: typisttech/php-matrix-action@74ecfe279f564c78619eeacfd2f470cb80a7db61 # v3.1.1
-        id: php-matrix
-
   composer-audit:
     permissions:
       contents: read
       security-events: write
       actions: read
-    needs: php-matrix
     runs-on: ubuntu-26.04
     steps:
       - parallel:
