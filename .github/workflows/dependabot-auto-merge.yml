@@ -34,7 +34,7 @@ jobs:
     steps:
       - if: ${{ !contains(fromJSON('["merge", "squash", "rebase"]'), inputs.strategy) }}
         run: |
-          echo "Invalid strategy. Must be one of 'merge', 'squash', or 'rebase'."
+          echo "::error title=Invalid strategy::Must be one of 'merge', 'squash', or 'rebase'"
           exit 1
 
       - name: Dependabot metadata

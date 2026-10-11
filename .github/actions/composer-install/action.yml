@@ -26,7 +26,7 @@ runs:
     - name: Assert prefer input
       if: ${{ !contains(fromJSON('["locked", "lowest", "highest"]'), inputs.prefer) }}
       run: |
-        echo "Invalid prefer. Must be one of 'locked', 'lowest', or 'highest'."
+        echo "::error title=Invalid prefer::Must be one of 'locked', 'lowest', or 'highest'"
         exit 1
       shell: bash
 
