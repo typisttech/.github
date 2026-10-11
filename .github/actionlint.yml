@@ -14,12 +14,12 @@ paths:
   .github/workflows/**/*.{yml,yaml}:
     # actionlint mistreat `background` & `parallel` & `$/` as invalid syntax.
     #
-    # See: 
+    # See:
     #  - https://github.com/rhysd/actionlint/issues/693
     #  - https://github.com/rhysd/actionlint/issues/711
     #
     # TODO: Remove after actionlint recognises them on its own.
     ignore:
-      - 'unexpected key "background" for step to run shell command'
+      - 'unexpected key "background" for step'
       - 'step must run script with "run" section or run action with "uses" section'
       - 'specifying action "\$/.*" in invalid format because ref is missing'

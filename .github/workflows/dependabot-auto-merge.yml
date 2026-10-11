@@ -22,13 +22,21 @@ on:
         default: squash
         type: string
 
+    secrets:
+      client-id:
+        description: GitHub App Client ID that will use to create, update and close the pull request.
+        required: true
+      private-key:
+        description: GitHub App private key that will use to create, update and close the pull request.
+        required: true
+
 permissions: {}
 
 jobs:
   auto-merge-pull-request:
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
+      pull-requests: read
     runs-on: ubuntu-slim
     if: github.event.pull_request.user.login == 'dependabot[bot]' && (inputs.major || inputs.minor || inputs.patch)
     steps:
@@ -42,6 +50,20 @@ jobs:
         uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
         with:
           github-token: "${{ github.token }}"
+        background: true
+
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          client-id: ${{ secrets.client-id }}
+          private-key: ${{ secrets.private-key }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
+        background: true
+
+      - wait-all:
 
       - if: |
           (inputs.major && steps.dependabot-metadata.outputs.update-type == 'version-update:semver-major')
@@ -50,5 +72,5 @@ jobs:
         run: gh pr merge --auto "--$STRATEGY" "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           STRATEGY: ${{ inputs.strategy }}
