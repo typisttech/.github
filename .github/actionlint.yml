@@ -23,3 +23,4 @@ paths:
       - 'unexpected key "background" for step'
       - 'step must run script with "run" section or run action with "uses" section'
       - 'specifying action "\$/.*" in invalid format because ref is missing'
+      - 'reusable workflow call "\$/.+" at "uses" is not following the format "owner/repo/path/to/workflow.yml@ref" nor "./path/to/workflow.yml"'
