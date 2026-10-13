@@ -66,7 +66,9 @@ jobs:
 
   golangci-lint:
     permissions:
+      security-events: write
       contents: read
+      actions: read
     if: ${{ inputs.golangci-lint }}
     runs-on: ubuntu-26.04
     steps:
@@ -82,5 +84,11 @@ jobs:
           version: ${{ inputs.golangci-lint-version }}
           version-file: ${{ inputs.golangci-lint-version-file }}
           install-mode: binary
+          args: --output.sarif.path golangci-lint.sarif --uniq-by-line=false --issues-exit-code=0 --max-issues-per-linter=0 --max-same-issues=0
         env:
           GOEXPERIMENT: ${{ inputs.go-experiment }}
+
+      - uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        with:
+          sarif_file: golangci-lint.sarif
+          category: golangci-lint.sarif
