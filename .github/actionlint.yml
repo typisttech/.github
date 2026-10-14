@@ -12,7 +12,11 @@ self-hosted-runner:
 
 paths:
   .github/workflows/**/*.{yml,yaml}:
-    # actionlint mistreat `background` & `parallel` & `$/` as invalid syntax.
+    # actionlint mistreat the following as invalid syntax:
+    #  - background
+    #  - parallel
+    #  - $/
+    #. - cache-mode
     #
     # See:
     #  - https://github.com/rhysd/actionlint/issues/693
@@ -24,3 +28,4 @@ paths:
       - 'step must run script with "run" section or run action with "uses" section'
       - 'specifying action "\$/.*" in invalid format because ref is missing'
       - 'reusable workflow call "\$/.+" at "uses" is not following the format "owner/repo/path/to/workflow.yml@ref" nor "./path/to/workflow.yml"'
+      - 'unexpected key "cache-mode" for "(workflow|job)" section'
