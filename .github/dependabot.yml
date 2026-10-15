@@ -11,3 +11,6 @@ updates:
       default-days: 3
       exclude:
         - "typisttech/*"
+    groups:
+      github-actions-dependencies:
+        group-by: dependency-name
