@@ -52,6 +52,8 @@ permissions: {}
 jobs:
   composer-normalize:
     if: ${{ inputs.composer-normalize }}
+    permissions:
+      contents: read
     runs-on: ubuntu-26.04
     steps:
       - parallel:
