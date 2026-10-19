@@ -5,8 +5,11 @@ on:
 
 permissions: {}
 
+cache-mode: none
+
 jobs:
   go-proxy:
+    cache-mode: none
     runs-on: ubuntu-slim
     env:
       GOPROXY: https://proxy.golang.org
