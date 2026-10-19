@@ -9,18 +9,23 @@ description: Install Composer Dependencies
 inputs:
   prefer:
     description: >
-      The version of dependencies to prefer. Must be one of 'locked' (default), 'lowest', or 'highest'.
+      The preferred dependency versions. Must be one of 'locked' (default), 'lowest', or 'highest'.
     required: true
     default: 'locked'
   composer-options:
     description: >
-      Additional options to pass to Composer. For example: '--no-scripts --optimize-autoloader'.
+      Additional Composer arguments separated by whitespace.
+      Arguments must not contain whitespace.
+      Quotes and backslash escapes are not interpreted.
+      Shell expansions and command substitutions are passed literally and are not evaluated.
+      For example: '--no-scripts --optimize-autoloader'.
     required: false
   working-directory:
     description: >
-      The directory where composer.json is located, if it is not in the repository root.
+      The directory containing composer.json, relative to the workspace.
+      Defaults to '.' (the workspace root).
     required: true
-    default: ${{ github.workspace }}
+    default: '.'
 
 runs:
   using: composite
@@ -43,35 +48,68 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Get Composer cache directory
+    - name: Determine Composer cache directory
       id: composer-cache
-      run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Determine PHP version
+      id: php-version
+      run: echo "version=$(php -r 'echo PHP_VERSION;')" >> "$GITHUB_OUTPUT"
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
 
     - name: Cache dependencies (locked)
       if: ${{ inputs.prefer == 'locked' }}
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
-        key: composer-${{ runner.os }}-${{ inputs.prefer }}-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          composer-${{ runner.os }}-${{ inputs.prefer }}-
+        key: composer-${{ inputs.prefer }}-php-${{ steps.php-version.outputs.version }}-${{ hashFiles(format('{0}/composer.lock', inputs.working-directory)) }}
 
     - name: Cache dependencies (non-locked)
       if: ${{ inputs.prefer != 'locked' }}
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
-        key: composer-${{ runner.os }}-${{ inputs.prefer }}-${{ hashFiles('**/composer.json') }}-${{ github.run_id }}-${{ github.run_attempt }}
+        key: composer-${{ inputs.prefer }}-php-${{ steps.php-version.outputs.version }}-${{ hashFiles(format('{0}/composer.json', inputs.working-directory)) }}-${{ github.run_id }}-${{ github.run_attempt }}
         restore-keys: |
-          composer-${{ runner.os }}-${{ inputs.prefer }}-${{ hashFiles('**/composer.json') }}-${{ github.run_id }}-
-          composer-${{ runner.os }}-${{ inputs.prefer }}-${{ hashFiles('**/composer.json') }}-
-          composer-${{ runner.os }}-${{ inputs.prefer }}-
+          composer-${{ inputs.prefer }}-php-${{ steps.php-version.outputs.version }}-${{ hashFiles(format('{0}/composer.json', inputs.working-directory)) }}-
+          composer-${{ inputs.prefer }}-php-${{ steps.php-version.outputs.version }}-
 
     - name: Install Composer dependencies
-      run: composer ${VERB} ${OPTIONS} --no-blocking --no-interaction --no-progress --ansi
+      run: |
+        set -euox pipefail
+
+        args=()
+
+        case "$PREFER" in
+          locked)
+            args+=(install)
+            ;;
+          lowest)
+            args+=(update --no-audit --prefer-lowest)
+            ;;
+          highest)
+            args+=(update --no-audit)
+            ;;
+          *)
+            echo "::error title=Invalid prefer::Must be one of 'locked', 'lowest', or 'highest'"
+            exit 1
+            ;;
+        esac
+
+        options=()
+        if [[ -n "${OPTIONS:-}" ]]; then
+          read -r -a options <<< "$OPTIONS"
+        fi
+        args+=("${options[@]}")
+
+        args+=(--no-interaction --no-progress --ansi)
+
+        composer "${args[@]}"
       env:
-        VERB: ${{ inputs.prefer == 'locked' && 'install' || 'update --no-audit' }}
-        OPTIONS: "${{ inputs.prefer == 'lowest' && '--prefer-lowest' || '' }} ${{ inputs.composer-options }}"
+        PREFER: ${{ inputs.prefer }}
+        OPTIONS: ${{ inputs.composer-options }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
