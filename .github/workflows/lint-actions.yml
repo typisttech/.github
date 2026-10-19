@@ -70,7 +70,7 @@ jobs:
       security-events: write
       contents: read
       actions: read
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-slim
     steps:
       - name: Assert zizmor-persona input
         if: ${{ !contains(fromJSON('["regular", "pedantic", "auditor", ""]'), inputs.zizmor-persona) }}
