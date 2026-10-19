@@ -17,8 +17,8 @@ permissions: {}
 jobs:
   govulncheck:
     permissions:
-      contents: read
       security-events: write
+      contents: read
       actions: read
     runs-on: ubuntu-slim
     env:
