@@ -72,9 +72,9 @@ jobs:
       - run: composer-normalize --dry-run
 
   php-matrix:
+    if: ${{ inputs.phpstan || inputs.mago }}
     permissions:
       contents: read
-    if: ${{ inputs.phpstan || inputs.mago }}
     runs-on: ubuntu-slim
     outputs:
       versions: ${{ steps.php-matrix.outputs.versions }}
@@ -90,10 +90,11 @@ jobs:
         id: php-matrix
 
   phpstan:
+    if: ${{ inputs.phpstan }}
+    needs:
+      - php-matrix
     permissions:
       contents: read
-    if: ${{ inputs.phpstan }}
-    needs: php-matrix
     runs-on: ubuntu-26.04
     strategy:
       matrix:
@@ -118,10 +119,11 @@ jobs:
       - run: vendor/bin/phpstan analyse --error-format=github
 
   mago:
+    if: ${{ inputs.mago }}
+    needs:
+      - php-matrix
     permissions:
       contents: read
-    if: ${{ inputs.mago }}
-    needs: php-matrix
     runs-on: ubuntu-26.04
     strategy:
       matrix:
@@ -150,9 +152,9 @@ jobs:
         - run: mago analyze
 
   box:
+    if: ${{ inputs.box }}
     permissions:
       contents: read
-    if: ${{ inputs.box }}
     runs-on: ubuntu-26.04
     steps:
       - parallel:
