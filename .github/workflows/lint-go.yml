@@ -8,6 +8,11 @@ on:
         default: go.mod
         type: string
 
+      tags:
+        description: 'Comma-separated list of build tags.'
+        default: ''
+        type: string
+
       go-experiment:
         default: ""
         type: string
@@ -60,8 +65,9 @@ jobs:
         with:
           go-version-file: ${{ inputs.go-version-file }}
 
-      - run: go fix -diff ./...
+      - run: go fix -diff -tags="${TAGS}" ./...
         env:
+          TAGS: ${{ inputs.tags }}
           GOEXPERIMENT: ${{ inputs.go-experiment }}
 
   golangci-lint:
