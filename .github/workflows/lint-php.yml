@@ -56,18 +56,17 @@ jobs:
       contents: read
     runs-on: ubuntu-26.04
     steps:
-      - parallel:
-        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-          with:
-            persist-credentials: false
-            sparse-checkout: composer.json
-            sparse-checkout-cone-mode: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: composer.json
+          sparse-checkout-cone-mode: false
 
-        - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
-          with:
-            php-version: ${{ inputs.composer-normalize-php-version }}
-            coverage: none
-            tools: "composer-normalize:${{ inputs.composer-normalize-version }}"
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ inputs.composer-normalize-php-version }}
+          coverage: none
+          tools: "composer-normalize:${{ inputs.composer-normalize-version }}"
 
       - run: composer-normalize --dry-run
 
@@ -102,15 +101,14 @@ jobs:
           - highest
           - locked
     steps:
-      - parallel:
-        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-          with:
-            persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-        - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
-          with:
-            php-version: ${{ needs.php-matrix.outputs.highest }}
-            coverage: none
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ needs.php-matrix.outputs.highest }}
+          coverage: none
 
       - uses: $/.github/actions/composer-install
         with:
@@ -131,16 +129,15 @@ jobs:
           - highest
           - locked
     steps:
-      - parallel:
-        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-          with:
-            persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-        - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
-          with:
-            php-version: ${{ needs.php-matrix.outputs.highest }}
-            coverage: none
-            tools: "mago:${{ inputs.mago-version }}"
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ needs.php-matrix.outputs.highest }}
+          coverage: none
+          tools: "mago:${{ inputs.mago-version }}"
 
       - uses: $/.github/actions/composer-install
         with:
@@ -157,16 +154,15 @@ jobs:
       contents: read
     runs-on: ubuntu-26.04
     steps:
-      - parallel:
-        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-          with:
-            persist-credentials: false
-            fetch-depth: 0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
 
-        - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
-          with:
-            php-version: ${{ inputs.box-php-version }}
-            coverage: none
-            tools: "box:${{ inputs.box-version }}"
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ inputs.box-php-version }}
+          coverage: none
+          tools: "box:${{ inputs.box-version }}"
 
       - run: box validate
