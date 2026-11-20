@@ -10,7 +10,7 @@ on:
         type: boolean
       composer-normalize-php-version:
         description: The PHP version for composer-normalize to use.
-        default: '8.5'
+        default: '8.6'
         type: string
       composer-normalize-version:
         description: The composer-normalize version to use.
@@ -40,7 +40,7 @@ on:
         type: boolean
       box-php-version:
         description: The PHP version for box to use.
-        default: '8.5'
+        default: '8.6'
         type: string
       box-version:
         description: The box version to use.
