@@ -78,19 +78,22 @@ jobs:
           echo "::error title=Invalid zizmor-persona::Must be one of 'regular', 'pedantic', or 'auditor'"
           exit 1
 
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
+      - parallel:
+        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+          with:
+            persist-credentials: false
 
-      - name: Inject zizmor config from `typisttech/.github` repo
-        run: |
-          curl --fail \
-            --retry 10 \
-            --retry-all-errors \
-            --retry-delay 1 \
-            --output .github/zizmor.yml \
-            https://raw.githubusercontent.com/typisttech/.github/refs/heads/main/.github/zizmor.yml
+        - name: Inject zizmor config from `typisttech/.github` repo
+          run: |
+            curl --fail \
+              --retry 10 \
+              --retry-all-errors \
+              --retry-delay 1 \
+              --output zizmor.yml \
+              https://raw.githubusercontent.com/typisttech/.github/refs/heads/main/.github/zizmor.yml
+          working-directory: ${{ runner.temp }}
 
       - uses: zizmorcore/zizmor-action@1b4550e929643b8b26a62303c6bd64814271a4f1 # v0.9.2
         with:
+          config: ${{ runner.temp }}/zizmor.yml
           persona: ${{ inputs.zizmor-persona || 'pedantic' }}
